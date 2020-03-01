@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +37,16 @@ public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
     holder.artist.setText(dataList.get(position).getArtists());
         holder.songName.setText(dataList.get(position).getSong());
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Uri songURI= Uri.parse(dataList.get(position).getUrl());
-//                Intent intent =new Intent(Intent.ACTION_VIEW,songURI);
+        Glide.with(mContext)
+                .asBitmap()
+                .load(dataList.get(position).getImgUrl())
+                .into(holder.image);
+        holder.parentLayout.setOnClickListener((View v) -> {
+                Uri songURI= Uri.parse(dataList.get(position).getUrl());
+                Intent intent =new Intent(Intent.ACTION_VIEW,songURI);
                 Toast.makeText(mContext, dataList.get(position).getUrl(), Toast.LENGTH_SHORT).show();
-            }
+                mContext.startActivity(intent);
+
         });
     }
 
@@ -57,13 +62,13 @@ public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-//        ImageView image;
+        ImageView image;
         TextView songName;
         TextView artist;
        CardView parentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            image=itemView.findViewById(R.id.image);
+            image=itemView.findViewById(R.id.image);
             artist=itemView.findViewById(R.id.singer);
             songName=itemView.findViewById(R.id.song_name);
          parentLayout=itemView.findViewById(R.id.card);
